@@ -104,9 +104,9 @@ export default function FoodOrderApp() {
   return (
     <div className="min-h-screen bg-[#DCD7C9] p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="flex gap-6 justify-center">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="w-full max-w-4xl space-y-6 mx-auto">
             {/* Header */}
             <div className="flex items-center gap-4">
               {/* Garis 3: bisa untuk language menu / profile */}
@@ -161,14 +161,11 @@ export default function FoodOrderApp() {
                 />
               </div>
 
-              <Button variant="ghost" className="w-12 h-12">
+              {/* <Button variant="ghost" className="w-12 h-12">
                 <span className="text-2xl">😋</span>
-              </Button>
+              </Button> */}
               <Button variant="ghost" className="w-12 h-12 relative">
                 <ShoppingCart className="w-5 h-5" />
-                <Badge className="absolute -top-1 -right-1 bg-[#2C3930] text-white rounded-full w-5 h-5 p-0 flex items-center justify-center text-xs">
-                  12
-                </Badge>
               </Button>
             </div>
 
@@ -269,15 +266,12 @@ export default function FoodOrderApp() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {popularDishes.map((item, idx) => {
-                    const featured = idx === 0; // pertama dijadikan featured
+                    const featured = idx === 0;
                     return (
                       <Card
                         key={item.id}
-                        className={`overflow-hidden transition-all hover:shadow-lg ${
-                          featured
-                            ? "bg-[#A27B5C] border-[#A27B5C]"
-                            : "bg-white"
-                        }`}
+                        className="overflow-hidden transition-all hover:shadow-lg ${
+                          featured bg-white"
                       >
                         <CardContent className="px-4 ">
                           <div className="relative mb-3">
@@ -299,25 +293,16 @@ export default function FoodOrderApp() {
                             </div>
                           </div>
                           <h4
-                            className={`font-semibold mb-2 text-center ${
-                              featured ? "text-white" : "text-gray-800"
-                            }`}
+                            className="font-semibold mb-2 text-center 
+                              text-gray-800"
                           >
                             {item.nama_produk}
                           </h4>
-                          <div
-                            className={`text-xs text-center mb-3 line-clamp-2 ${
-                              featured ? "text-white/90" : "text-gray-500"
-                            }`}
-                          >
+                          <div className="text-xs text-center mb-3 line-clamp-2 text-gray-500">
                             {item.keterangan || "Menu spesial kami"}
                           </div>
                           <div className="flex items-center justify-between">
-                            <span
-                              className={`text-xl font-bold ${
-                                featured ? "text-white" : "text-gray-800"
-                              }`}
-                            >
+                            <span className="text-xl font-bold text-gray-800">
                               Rp {Number(item.harga).toLocaleString("id-ID")}
                             </span>
                             <Button
@@ -363,140 +348,144 @@ export default function FoodOrderApp() {
               )}
             </div>
           </div>
-          {/* Cart Sidebar (masih dummy) */}
-          <div className="lg:col-span-1">
-            <Card className="sticky top-6 bg-white shadow-lg">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold">Keranjang</h3>
-                  {/* <Button variant="ghost" size="icon">
+          {/* Cart Sidebar */}
+          <div className="shrink-0">
+            {cartItems.length > 0 ? (
+              <Card className="sticky top-6 bg-white shadow-lg">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-xl font-bold">Keranjang</h3>
+                    {/* <Button variant="ghost" size="icon">
                     <Edit2 className="w-4 h-4" />
                   </Button> */}
-                </div>
+                  </div>
 
-                <div className="space-y-4 mb-6">
-                  {cartItems.length === 0 ? (
-                    <div className="text-center text-gray-500 py-10">
-                      Keranjang Kosong
-                    </div>
-                  ) : (
-                    cartItems.map((item) => (
-                      <div key={item.id} className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
-                          {item.image ? (
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <span className="text-2xl">🍽️</span>
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex flex-col gap-0.5 text-sm">
-                            <span className="text-gray-700">{item.name}</span>
-                            <div>
-                              <span>x</span>
-                              <span className="font-medium">
-                                {item.quantity}
-                              </span>
-                              <div className="text-black font-semibold">
-                                Rp.{item.price * item.quantity}
+                  <div className="space-y-4 mb-6">
+                    {cartItems.length === 0 ? (
+                      <div className="text-center text-gray-500 py-10">
+                        Keranjang Kosong
+                      </div>
+                    ) : (
+                      cartItems.map((item) => (
+                        <div key={item.id} className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
+                            {item.image ? (
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <span className="text-2xl">🍽️</span>
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex flex-col gap-0.5 text-sm">
+                              <span className="text-gray-700">{item.name}</span>
+                              <div>
+                                <span>x</span>
+                                <span className="font-medium">
+                                  {item.quantity}
+                                </span>
+                                <div className="text-black font-semibold">
+                                  Rp.{item.price * item.quantity}
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="flex items-center gap-2 rounded-md">
-                          <Button
-                            size="icon"
-                            className="w-7 h-7 rounded-full bg-[#A27B5C] text-white hover:bg-[#8d6a4d]"
-                            onClick={() => {
-                              setCartItems((prev) =>
-                                prev
-                                  .map((ci) =>
-                                    ci.id === item.id
-                                      ? { ...ci, quantity: ci.quantity - 1 }
-                                      : ci
-                                  )
-                                  .filter((ci) => ci.quantity > 0)
-                              );
-                            }}
-                          >
-                            <Minus className="w-1 h1" />
-                          </Button>
+                          <div className="flex items-center gap-2 rounded-md">
+                            <Button
+                              size="icon"
+                              className="w-7 h-7 rounded-full bg-[#A27B5C] text-white hover:bg-[#8d6a4d]"
+                              onClick={() => {
+                                setCartItems((prev) =>
+                                  prev
+                                    .map((ci) =>
+                                      ci.id === item.id
+                                        ? { ...ci, quantity: ci.quantity - 1 }
+                                        : ci
+                                    )
+                                    .filter((ci) => ci.quantity > 0)
+                                );
+                              }}
+                            >
+                              <Minus className="w-1 h1" />
+                            </Button>
 
-                          <Input
-                            type="number"
-                            className="
+                            <Input
+                              type="number"
+                              className="
                               w-12 text-center
                               [&::-webkit-inner-spin-button]:appearance-none
                               [&::-webkit-outer-spin-button]:appearance-none
                               [-moz-appearance:textfield]
                             "
-                            value={item.quantity}
-                            onChange={(e) => {
-                              const val = Number(e.target.value);
-                              setCartItems((prev) =>
-                                prev
-                                  .map((ci) =>
+                              value={item.quantity}
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                setCartItems((prev) =>
+                                  prev
+                                    .map((ci) =>
+                                      ci.id === item.id
+                                        ? { ...ci, quantity: val }
+                                        : ci
+                                    )
+                                    .filter((ci) => ci.quantity > 0)
+                                );
+                              }}
+                            />
+
+                            <Button
+                              size="icon"
+                              className="w-7 h-7 rounded-full bg-[#A27B5C] text-white hover:bg-[#8d6a4d]"
+                              onClick={() => {
+                                setCartItems((prev) =>
+                                  prev.map((ci) =>
                                     ci.id === item.id
-                                      ? { ...ci, quantity: val }
+                                      ? { ...ci, quantity: ci.quantity + 1 }
                                       : ci
                                   )
-                                  .filter((ci) => ci.quantity > 0)
-                              );
-                            }}
-                          />
-
-                          <Button
-                            size="icon"
-                            className="w-7 h-7 rounded-full bg-[#A27B5C] text-white hover:bg-[#8d6a4d]"
-                            onClick={() => {
-                              setCartItems((prev) =>
-                                prev.map((ci) =>
-                                  ci.id === item.id
-                                    ? { ...ci, quantity: ci.quantity + 1 }
-                                    : ci
-                                )
-                              );
-                            }}
-                          >
-                            <Plus className="w-1 h1" />
-                          </Button>
+                                );
+                              }}
+                            >
+                              <Plus className="w-1 h1" />
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-
-                <div className="border-t pt-4 justify-center items-center space-y-3">
-                  <div className="flex justify-between text-sm">
-                    <div className="flex gap-8">
-                      <span className="text-gray-600">Total</span>
-                      <span>x{totalQuantity}</span>
-                    </div>
-                    <span className="font-medium">{subtotal.toFixed(0)}</span>
+                      ))
+                    )}
                   </div>
-                  <div className="flex justify_between text-sm">
-                    {/* <span className="text-gray-600">Discount</span>
+
+                  <div className="border-t pt-4 justify-center items-center space-y-3">
+                    <div className="flex justify-between text-sm">
+                      <div className="flex gap-8">
+                        <span className="text-gray-600">Total</span>
+                        <span>x{totalQuantity}</span>
+                      </div>
+                      <span className="font-medium">{subtotal.toFixed(0)}</span>
+                    </div>
+                    <div className="flex justify_between text-sm">
+                      {/* <span className="text-gray-600">Discount</span>
                     <span className="text-[#2C3930] font-medium">
                       %{discount}
                     </span> */}
+                    </div>
+                    <div className="flex justify-between items-center pt-3 border-t">
+                      <span className="font-semibold">Total</span>
+                      <span className="text-2xl font-bold text-[#A27B5C]">
+                        Rp.{final.toFixed()}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex justify-between items-center pt-3 border-t">
-                    <span className="font-semibold">Total</span>
-                    <span className="text-2xl font-bold text-[#A27B5C]">
-                      Rp.{final.toFixed()}
-                    </span>
-                  </div>
-                </div>
 
-                <Button className="w-full mt-6 bg-[#2C3930] hover:bg-[#3F4F44] text-white py-6 text-lg font-semibold">
-                  Checkout
-                </Button>
-              </CardContent>
-            </Card>
+                  <Button className="w-full mt-6 bg-[#2C3930] hover:bg-[#3F4F44] text-white py-6 text-lg font-semibold">
+                    Checkout
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="hidden"></div>
+            )}
           </div>
         </div>
       </div>
