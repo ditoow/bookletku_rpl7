@@ -13,25 +13,17 @@ import {
   PageTrackingData,
   MenuItemViewData,
   MenuItemOrderStats,
-  TableUsageData,
 } from "@/app/admin/pages/dashboard/services/trackingServices";
 
-import {
-  Eye,
-  Menu,
-  TrendingUp,
-  ShoppingCart,
-  DollarSign,
-  Activity,
-  Users,
-  Package,
-  LineChart as LineChartIcon,
-} from "lucide-react";
+import { Eye, ShoppingCart, DollarSign, Package } from "lucide-react";
 
 import {
   CartesianGrid,
   Line,
   LineChart,
+  Bar,
+  BarChart,
+  LabelList,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -71,6 +63,7 @@ export default function AdminDashboard() {
     MenuItemOrderStats[]
   >([]);
   const [categoryStats, setCategoryStats] = useState<CategoryStats[]>([]);
+
   const [stats, setStats] = useState<TrackingStats>({
     totalPageAccesses: 0,
     totalMenuItemViews: 0,
@@ -84,11 +77,6 @@ export default function AdminDashboard() {
   });
 
   const [loading, setLoading] = useState(true);
-
-  const chartData = mostViewedItems.map((item) => ({
-    name: item.menu_items?.nama_produk ?? "Unknown",
-    views: item.view_count,
-  }));
 
   useEffect(() => {
     loadDashboardData();
@@ -112,7 +100,7 @@ export default function AdminDashboard() {
         getHighestRevenueItems(5),
         getCategoryStats(),
         getTrackingStats(),
-        getMostAddedToCart(5), // ← NEW
+        getMostAddedToCart(5),
       ]);
 
       setMostAddedToCart(addedCart);
@@ -121,6 +109,7 @@ export default function AdminDashboard() {
       setBestSellingItems(bestItems);
       setHighestRevenueItems(revenueItems);
       setCategoryStats(categories);
+      setStats(statistics);
     } catch (error) {
       console.error("Error loading dashboard data:", error);
     } finally {
@@ -213,7 +202,7 @@ export default function AdminDashboard() {
 
       {/* GRID UTAMA */}
       <div className="grid grid-cols-1 gap-6">
-        {/* === MENU PALING DITAMBAHKAN KE KERANJANG === */}
+        {/* === [UPDATED] MENU PALING DITAMBAHKAN KE KERANJANG (BAR CHART) === */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -229,26 +218,42 @@ export default function AdminDashboard() {
               </p>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* === KIRI: GRAFIK === */}
+                {/* === KIRI: GRAFIK BAR === */}
                 <div className="w-full h-full py-5">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart
                       data={mostAddedToCart.map((i) => ({
                         name: i.menu_items?.nama_produk,
                         total: i.total_added,
                       }))}
+                      layout="horizontal"
+                      margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
                     >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Line
-                        type="monotone"
-                        dataKey="total"
-                        stroke="#4f46e5" // warna ungu Elegant (tidak apa, ini 1 warna)
-                        strokeWidth={3}
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} />
+
+                      {/* 1. Hapus 'hide' agar nama produk muncul di garis X */}
+                      <XAxis
+                        dataKey="name"
+                        tick={{ fontSize: 12, fill: "#6b7280" }}
+                        interval={0}
+                        tickMargin={10}
                       />
-                    </LineChart>
+
+                      <YAxis />
+                      <Tooltip
+                        cursor={{ fill: "transparent" }}
+                        contentStyle={{ borderRadius: "8px" }}
+                      />
+
+                      <Bar
+                        dataKey="total"
+                        fill="#4f46e5"
+                        radius={[4, 4, 0, 0]}
+                        barSize={40}
+                      >
+                        {/* 2. Hapus LabelList (angka total) yang tadi ditambahkan */}
+                      </Bar>
+                    </BarChart>
                   </ResponsiveContainer>
                 </div>
 
@@ -288,7 +293,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        {/* === KATEGORI TERPOPULER === */}
+        {/* === KATEGORI TERPOPULER (LINE CHART) === */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -303,13 +308,13 @@ export default function AdminDashboard() {
               </p>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* === KIRI: GRAFIK === */}
+                {/* === KIRI: GRAFIK LINE === */}
                 <div className="w-full h-full py-5">
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height={300}>
                     <LineChart
                       data={categoryStats.map((i) => ({
                         name: i.kategori,
-                        total: i.total_quantity, // jumlah item terjual per kategori
+                        total: i.total_quantity,
                       }))}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
@@ -319,8 +324,9 @@ export default function AdminDashboard() {
                       <Line
                         type="monotone"
                         dataKey="total"
-                        stroke="#10b981" // hijau emerald
+                        stroke="#10b981"
                         strokeWidth={3}
+                        dot={{ r: 4 }}
                       />
                     </LineChart>
                   </ResponsiveContainer>
@@ -387,7 +393,8 @@ export default function AdminDashboard() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-gray-900 truncate">
-                          {item.menu_items?.nama_produk}
+                          {item.nama_produk}{" "}
+                          {/* Akses langsung sesuai View baru */}
                         </p>
                         <p className="text-xs text-gray-500">
                           {formatNumber(item.total_ordered)} pesanan

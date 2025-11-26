@@ -18,6 +18,7 @@ interface CartSidebarProps {
   setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
   isOpen: boolean;
   onClose: () => void;
+  onCheckout: () => void;
 }
 
 export default function CartSidebar({
@@ -25,6 +26,7 @@ export default function CartSidebar({
   setCartItems,
   isOpen,
   onClose,
+  onCheckout,
 }: CartSidebarProps) {
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -192,7 +194,11 @@ export default function CartSidebar({
                   </div>
                 </div>
 
-                <Button className="w-full mt-6 bg-[#2C3930] hover:bg-[#3F4F44] text-white py-6 text-lg font-semibold shadow-lg">
+                {/* BUTTON CHECKOUT DISINI, CLASSNAME TETAP SAMA */}
+                <Button
+                  className="w-full mt-6 bg-[#2C3930] hover:bg-[#3F4F44] text-white py-6 text-lg font-semibold shadow-lg"
+                  onClick={onCheckout}
+                >
                   Checkout
                 </Button>
               </>

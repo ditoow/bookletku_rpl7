@@ -15,9 +15,10 @@ interface CartItem {
 interface CartProps {
   cartItems: CartItem[];
   setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
+  onCheckout: () => void;
 }
 
-export function CartMobile({ cartItems, setCartItems }: CartProps) {
+export function CartMobile({ cartItems, setCartItems, onCheckout }: CartProps) {
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
@@ -137,7 +138,11 @@ export function CartMobile({ cartItems, setCartItems }: CartProps) {
             </div>
           </div>
 
-          <button className="w-full mt-6 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-2xl py-4 text-lg transition-colors">
+          {/* BUTTON CHECKOUT MOBILE, CLASSNAME TETAP SAMA */}
+          <button
+            onClick={onCheckout}
+            className="w-full mt-6 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-2xl py-4 text-lg transition-colors"
+          >
             Pesan via WhatsApp
           </button>
         </div>

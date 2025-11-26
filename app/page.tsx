@@ -12,7 +12,6 @@ import CartSidebar from "@/components/mainpage/cartSidebar";
 import { CartMobile } from "@/components/cart/cartMobile";
 import CartButton from "@/components/mainpage/CartButton";
 
-// Tipe data untuk Menu
 type MenuRow = {
   id: string;
   nama_produk: string;
@@ -27,7 +26,6 @@ type MenuRow = {
 export default function FoodOrderApp() {
   const [cartItems, setCartItems] = useState<any[]>([]);
 
-  // ==== DATA DARI SUPABASE ====
   const [menuItems, setMenuItems] = useState<MenuRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +37,6 @@ export default function FoodOrderApp() {
 
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // === TRACKING ADD TO CART KE SUPABASE ===
   const trackAddToCart = async (menuId: string) => {
     try {
       const { error } = await supabase
@@ -52,7 +49,6 @@ export default function FoodOrderApp() {
     }
   };
 
-  // 1. Load Data dengan URUTAN POSITION
   useEffect(() => {
     const loadMenu = async () => {
       setLoading(true);
@@ -99,19 +95,12 @@ export default function FoodOrderApp() {
     return list;
   }, [menuItems, activeCategory, search]);
 
-  // 2. FEATURED MENU: Ambil 5 item teratas
   const menuDishes = useMemo(() => menuItems.slice(0, 5), [menuItems]);
-
-  // Menu filtered
   const popularDishes = useMemo(() => filteredMenu.slice(), [filteredMenu]);
-
   const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-  // === HANDLE ADD PATCHED WITH TRACKING ===
   const handleAdd = async (item: any) => {
     setIsCartOpen(true);
-
-    // 🔥 TRACKING DI SINI
     trackAddToCart(item.id);
 
     setCartItems((prev: any[]) => {
@@ -132,6 +121,45 @@ export default function FoodOrderApp() {
         },
       ];
     });
+  };
+
+  const handleCheckout = async () => {
+    if (cartItems.length === 0) return;
+
+    const totalAmount = cartItems.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+
+    try {
+      const { data: orderData, error: orderError } = await supabase
+        .from("orders")
+        .insert({ total_amount: totalAmount, status: "completed" })
+        .select()
+        .single();
+
+      if (orderError) throw orderError;
+
+      const orderItemsData = cartItems.map((item) => ({
+        order_id: orderData.id,
+        menu_item_id: item.id,
+        quantity: item.quantity,
+        price: item.price,
+      }));
+
+      const { error: itemsError } = await supabase
+        .from("order_items")
+        .insert(orderItemsData);
+
+      if (itemsError) throw itemsError;
+
+      alert("Pesanan berhasil dibuat!");
+      setCartItems([]);
+      setIsCartOpen(false);
+    } catch (err: any) {
+      console.error("Checkout error:", err);
+      alert("Gagal checkout: " + err.message);
+    }
   };
 
   return (
@@ -188,13 +216,18 @@ export default function FoodOrderApp() {
                 setCartItems={setCartItems}
                 isOpen={isCartOpen}
                 onClose={() => setIsCartOpen(false)}
+                onCheckout={handleCheckout}
               />
             </div>
           </div>
 
           {/* Cart Mobile */}
           <div className="block md:hidden">
-            <CartMobile cartItems={cartItems} setCartItems={setCartItems} />
+            <CartMobile
+              cartItems={cartItems}
+              setCartItems={setCartItems}
+              onCheckout={handleCheckout}
+            />
           </div>
         </div>
       </div>
