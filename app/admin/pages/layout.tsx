@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import AdminSidebar from "@/components/sidebar/sidebar";
-import { Loader2 } from "lucide-react";
+import { Loader2, Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function AdminLayout({
   children,
@@ -13,20 +14,18 @@ export default function AdminLayout({
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const checkSession = async () => {
       try {
-        // Cek apakah ada session aktif
         const {
           data: { session },
         } = await supabase.auth.getSession();
 
         if (!session) {
-          // Jika tidak login, tendang ke halaman login
           router.replace("/admin/login");
         } else {
-          // Jika login, izinkan akses
           setIsLoading(false);
         }
       } catch (error) {
@@ -38,7 +37,6 @@ export default function AdminLayout({
     checkSession();
   }, [router]);
 
-  // Tampilkan loading screen saat sedang mengecek status login
   if (isLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-gray-50">
@@ -50,11 +48,32 @@ export default function AdminLayout({
     );
   }
 
-  // Render halaman admin jika sudah lolos pengecekan
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <AdminSidebar />
-      <main className="flex-1 p-6 overflow-y-auto h-screen">{children}</main>
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
+      {/* Sidebar dengan props kontrol */}
+      <AdminSidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
+
+      {/* Main Content Wrapper */}
+      <div className="flex-1 flex flex-col w-full">
+        {/* Header Mobile (Hanya muncul di layar kecil) */}
+        <header className="md:hidden bg-white border-b p-4 flex items-center gap-4 sticky top-0 z-30">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsSidebarOpen(true)}
+            className="-ml-2"
+          >
+            <Menu className="h-6 w-6 text-gray-700" />
+          </Button>
+          <h1 className="font-bold text-lg text-gray-800">Admin Panel</h1>
+        </header>
+
+        {/* Konten Halaman */}
+        <main className="flex-1 p-4 md:p-6 overflow-y-auto">{children}</main>
+      </div>
     </div>
   );
 }

@@ -10,10 +10,8 @@ import { Product, updateMenuOrder } from "./services/productService";
 import { ProductTable } from "./components/productTable";
 import { ProductFormDialog } from "./components/productFormDialog";
 import { ProductDeleteDialog } from "./components/productDeleteDialog";
-// import { ProductTable } from "./components/ProductTable";
 
 export default function Dashboard() {
-  // 1. Gunakan Custom Hook untuk menangani semua logic data
   const {
     products,
     loading,
@@ -24,19 +22,15 @@ export default function Dashboard() {
     removeProduct,
   } = useProducts();
 
-  // 2. State lokal khusus untuk UI halaman ini
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-  // Logic filtering pencarian (client-side)
   const filteredProducts = products.filter((p) =>
     p.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  // --- Event Handlers ---
 
   const handleAddClick = () => {
     setEditingProduct(null);
@@ -72,7 +66,6 @@ export default function Dashboard() {
     }
   };
 
-  // Handler ini dipanggil saat user selesai drag
   const handleReorder = async (newOrder: any[]) => {
     try {
       await updateMenuOrder(newOrder);
@@ -82,7 +75,6 @@ export default function Dashboard() {
     }
   };
 
-  // Tampilan Loading Awal
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-3">
@@ -93,42 +85,44 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-2 md:p-0">
       {/* --- Header --- */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-gray-800">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
             Products Management
           </h2>
-          <p className="text-gray-500 mt-1">
+          <p className="text-sm md:text-base text-gray-500 mt-1">
             Kelola menu dan produk restoran Anda
           </p>
         </div>
         <Button
           onClick={handleAddClick}
-          className="bg-[#FF9B6A] hover:bg-[#FF8A55] rounded-xl"
+          className="bg-[#FF9B6A] hover:bg-[#FF8A55] rounded-xl w-full sm:w-auto"
         >
           <Plus size={20} className="mr-2" />
           Tambah Produk
         </Button>
       </div>
 
-      {/* --- Search Bar --- */}
-      <div className="flex items-center justify-between p-6 bg-white border rounded-xl shadow-sm">
+      {/* --- Search Bar (Responsif) --- */}
+      {/* Diubah dari flex biasa menjadi flex-col di mobile agar tidak gepeng */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 md:p-6 bg-white border rounded-xl shadow-sm gap-4">
         <div>
-          <h3 className="font-bold text-xl">Daftar Produk</h3>
+          <h3 className="font-bold text-lg md:text-xl">Daftar Produk</h3>
           <span className="text-sm text-gray-500">
             {products.length} produk tersedia
           </span>
         </div>
-        <div className="relative w-full max-w-xs">
+
+        <div className="relative w-full sm:max-w-xs">
           <Search
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
             size={20}
           />
           <Input
             placeholder="Cari produk..."
-            className="pl-10"
+            className="pl-10 w-full"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -141,6 +135,7 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Tabel sudah responsive karena ProductTable.tsx memiliki overflow-x-auto */}
       <ProductTable
         products={filteredProducts}
         loading={loading}

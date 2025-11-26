@@ -23,7 +23,6 @@ import {
   LineChart,
   Bar,
   BarChart,
-  LabelList,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -141,19 +140,19 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="w-full p-6 space-y-6">
+    <div className="w-full p-4 md:p-6 space-y-6">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
           Analytics Dashboard
         </h1>
-        <p className="text-gray-600">
+        <p className="text-sm md:text-base text-gray-600">
           Monitor performa menu, penjualan, dan aktivitas pengunjung
         </p>
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
@@ -202,12 +201,12 @@ export default function AdminDashboard() {
 
       {/* GRID UTAMA */}
       <div className="grid grid-cols-1 gap-6">
-        {/* === [UPDATED] MENU PALING DITAMBAHKAN KE KERANJANG (BAR CHART) === */}
+        {/* === MENU PALING DITAMBAHKAN KE KERANJANG (BAR CHART) === */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-base md:text-lg">
               <ShoppingCart className="h-5 w-5" />
-              Menu Paling Sering Ditambahkan ke Keranjang
+              Menu Paling Sering Ditambahkan
             </CardTitle>
           </CardHeader>
 
@@ -219,8 +218,8 @@ export default function AdminDashboard() {
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* === KIRI: GRAFIK BAR === */}
-                <div className="w-full h-full py-5">
-                  <ResponsiveContainer width="100%" height={300}>
+                <div className="w-full h-64 md:h-full min-h-[250px] py-2">
+                  <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={mostAddedToCart.map((i) => ({
                         name: i.menu_items?.nama_produk,
@@ -230,29 +229,24 @@ export default function AdminDashboard() {
                       margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
                     >
                       <CartesianGrid strokeDasharray="3 3" vertical={false} />
-
-                      {/* 1. Hapus 'hide' agar nama produk muncul di garis X */}
                       <XAxis
                         dataKey="name"
                         tick={{ fontSize: 12, fill: "#6b7280" }}
                         interval={0}
                         tickMargin={10}
                       />
-
-                      <YAxis />
+                      <YAxis width={30} />{" "}
+                      {/* Lebar YAxis diperkecil untuk mobile */}
                       <Tooltip
                         cursor={{ fill: "transparent" }}
                         contentStyle={{ borderRadius: "8px" }}
                       />
-
                       <Bar
                         dataKey="total"
                         fill="#4f46e5"
                         radius={[4, 4, 0, 0]}
                         barSize={40}
-                      >
-                        {/* 2. Hapus LabelList (angka total) yang tadi ditambahkan */}
-                      </Bar>
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -264,13 +258,13 @@ export default function AdminDashboard() {
                       key={item.menu_item_id}
                       className="flex items-center justify-between p-3 rounded-lg border hover:bg-gray-50 transition-colors"
                     >
-                      <div className="flex items-center gap-3 flex-1">
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 font-semibold text-sm">
+                      <div className="flex items-center gap-3 flex-1 overflow-hidden">
+                        <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 font-semibold text-sm">
                           {index + 1}
                         </div>
 
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-gray-900 truncate">
+                          <p className="font-medium text-gray-900 truncate text-sm md:text-base">
                             {item.menu_items?.nama_produk}
                           </p>
                           <p className="text-xs text-gray-500">
@@ -279,11 +273,13 @@ export default function AdminDashboard() {
                         </div>
                       </div>
 
-                      <div className="text-right">
+                      <div className="text-right flex-shrink-0 ml-2">
                         <p className="text-lg font-bold text-gray-900">
                           {formatNumber(item.total_added)}
                         </p>
-                        <p className="text-xs text-gray-500">ditambahkan</p>
+                        <p className="text-[10px] md:text-xs text-gray-500">
+                          added
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -296,7 +292,7 @@ export default function AdminDashboard() {
         {/* === KATEGORI TERPOPULER (LINE CHART) === */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-base md:text-lg">
               <Package className="h-5 w-5" />
               Kategori Populer
             </CardTitle>
@@ -309,8 +305,8 @@ export default function AdminDashboard() {
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* === KIRI: GRAFIK LINE === */}
-                <div className="w-full h-full py-5">
-                  <ResponsiveContainer width="100%" height={300}>
+                <div className="w-full h-64 md:h-full min-h-[250px] py-2">
+                  <ResponsiveContainer width="100%" height="100%">
                     <LineChart
                       data={categoryStats.map((i) => ({
                         name: i.kategori,
@@ -318,8 +314,8 @@ export default function AdminDashboard() {
                       }))}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
+                      <XAxis dataKey="name" fontSize={12} />
+                      <YAxis width={30} fontSize={12} />
                       <Tooltip />
                       <Line
                         type="monotone"
@@ -339,13 +335,13 @@ export default function AdminDashboard() {
                       key={index}
                       className="flex items-center justify-between p-3 rounded-lg border hover:bg-gray-50 transition-colors"
                     >
-                      <div className="flex items-center gap-3 flex-1">
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 font-semibold text-sm">
+                      <div className="flex items-center gap-3 flex-1 overflow-hidden">
+                        <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 font-semibold text-sm">
                           {index + 1}
                         </div>
 
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-gray-900">
+                          <p className="font-medium text-gray-900 text-sm md:text-base truncate">
                             {category.kategori}
                           </p>
                           <p className="text-xs text-gray-500">
@@ -354,7 +350,7 @@ export default function AdminDashboard() {
                         </div>
                       </div>
 
-                      <div className="text-right">
+                      <div className="text-right flex-shrink-0 ml-2">
                         <p className="text-sm font-bold text-gray-900">
                           {formatCurrency(category.total_revenue)}
                         </p>
@@ -370,7 +366,7 @@ export default function AdminDashboard() {
         {/* === REVENUE TERTINGGI === */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-base md:text-lg">
               <DollarSign className="h-5 w-5" />
               Menu dengan Revenue Tertinggi
             </CardTitle>
@@ -387,21 +383,20 @@ export default function AdminDashboard() {
                     key={item.id}
                     className="flex items-center justify-between p-3 rounded-lg border hover:bg-gray-50 transition-colors"
                   >
-                    <div className="flex items-center gap-3 flex-1">
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 font-semibold text-sm">
+                    <div className="flex items-center gap-3 flex-1 overflow-hidden">
+                      <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 font-semibold text-sm">
                         {index + 1}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-gray-900 truncate">
-                          {item.nama_produk}{" "}
-                          {/* Akses langsung sesuai View baru */}
+                        <p className="font-medium text-gray-900 truncate text-sm md:text-base">
+                          {item.nama_produk}
                         </p>
                         <p className="text-xs text-gray-500">
                           {formatNumber(item.total_ordered)} pesanan
                         </p>
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right flex-shrink-0 ml-2">
                       <p className="text-sm font-bold text-gray-900">
                         {formatCurrency(Number(item.total_revenue))}
                       </p>
