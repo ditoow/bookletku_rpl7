@@ -3,7 +3,7 @@
 import { Menu, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Cart } from "../cart/Cart";
+import { CartMobile } from "../cart/cartMobile";
 
 interface HeaderProps {
   language: "id" | "en";
@@ -27,7 +27,7 @@ export default function Header({
   setCartItems,
 }: HeaderProps) {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-4 ">
       {/* Garis 3 */}
       <div className="relative">
         <Button
@@ -78,8 +78,8 @@ export default function Header({
         />
       </div>
 
-      {/* Cart */}
-      <Cart cartItems={cartItems} setCartItems={setCartItems} />
+      {/* Cart
+      <Cart cartItems={cartItems} setCartItems={setCartItems} /> */}
     </div>
   );
 }

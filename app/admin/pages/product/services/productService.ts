@@ -19,14 +19,15 @@ export type ProductInput = {
 
 // --- Fetch Data ---
 export const getProducts = async (): Promise<Product[]> => {
+  // Ambil data urut berdasarkan Position (Drag & Drop)
   const { data, error } = await supabase
     .from("menu_items")
     .select("*")
+    .order("position", { ascending: true }) // <--- PRIMARY SORT
     .order("created_at", { ascending: false });
 
   if (error) throw new Error(error.message);
 
-  // Mapping data dari database ke tipe Product aplikasi kita
   return (data || []).map((item) => ({
     id: item.id,
     name: item.nama_produk || "",
@@ -35,6 +36,33 @@ export const getProducts = async (): Promise<Product[]> => {
     image: item.image_url || "🍽️",
     description: item.keterangan || "",
   }));
+};
+
+// --- Update Order (FIXED) ---
+export const updateMenuOrder = async (items: Product[]) => {
+  // Mapping data agar SESUAI dengan nama kolom di Database Supabase
+  // Kita WAJIB kirim ulang data lama (nama, harga, dll) agar tidak melanggar constraint NOT NULL
+  const updates = items.map((item, index) => ({
+    id: item.id,
+    position: index, // Update posisi baru
+    
+    // Field lain wajib disertakan:
+    nama_produk: item.name,
+    kategori: item.category,
+    harga: item.price,
+    // Jika image masih default placeholder, kirim null, jika tidak kirim URL-nya
+    image_url: item.image === "🍽️" ? null : item.image, 
+    keterangan: item.description 
+  }));
+
+  const { error } = await supabase
+    .from("menu_items")
+    .upsert(updates, { onConflict: "id" });
+
+  if (error) {
+    console.error("Detail Error Supabase:", error.message, error.details);
+    throw error;
+  }
 };
 
 // --- Upload Image ---
@@ -61,13 +89,12 @@ export const uploadProductImage = async (file: File): Promise<string> => {
   return publicUrl;
 };
 
-// --- Create Product ---
+// --- CRUD Lainnya ---
 export const createProduct = async (product: ProductInput) => {
   const { error } = await supabase.from("menu_items").insert([product]);
   if (error) throw new Error(error.message);
 };
 
-// --- Update Product ---
 export const updateProduct = async (id: string, product: ProductInput) => {
   const { error } = await supabase
     .from("menu_items")
@@ -76,7 +103,6 @@ export const updateProduct = async (id: string, product: ProductInput) => {
   if (error) throw new Error(error.message);
 };
 
-// --- Delete Product ---
 export const deleteProductById = async (id: string) => {
   const { error } = await supabase.from("menu_items").delete().eq("id", id);
   if (error) throw new Error(error.message);

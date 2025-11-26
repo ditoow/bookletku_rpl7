@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Plus, Search, Loader2, X } from "lucide-react";
 import { useProducts } from "./hooks/useProduct";
-import { Product } from "./services/productService";
+import { Product, updateMenuOrder } from "./services/productService";
 import { ProductTable } from "./components/productTable";
 import { ProductFormDialog } from "./components/productFormDialog";
 import { ProductDeleteDialog } from "./components/productDeleteDialog";
@@ -69,6 +69,16 @@ export default function Dashboard() {
       } catch (err) {
         alert("Gagal menghapus produk");
       }
+    }
+  };
+
+  // Handler ini dipanggil saat user selesai drag
+  const handleReorder = async (newOrder: any[]) => {
+    try {
+      await updateMenuOrder(newOrder);
+      console.log("Urutan tersimpan!");
+    } catch (err) {
+      alert("Gagal menyimpan urutan.");
     }
   };
 
@@ -137,6 +147,7 @@ export default function Dashboard() {
         onEdit={handleEditClick}
         onDelete={setDeleteConfirmId}
         onImageClick={setPreviewImage}
+        onReorder={handleReorder}
       />
 
       <ProductFormDialog
