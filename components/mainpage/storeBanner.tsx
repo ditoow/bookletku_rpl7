@@ -26,8 +26,8 @@ export default function StoreBanner({
   const text = {
     desc:
       language === "id"
-        ? "Resep makanan segar & sehat"
-        : "Fresh & healthy food recipe",
+        ? "Menu makanan segar & sehat"
+        : "Fresh & healthy food menu",
     itemLabel: language === "id" ? "Total item" : "Total items",
     catLabel: language === "id" ? "Kategori" : "Categories",
   };
@@ -42,10 +42,10 @@ export default function StoreBanner({
             <div
               className={`${iconBgClass} rounded-full w-16 h-16 flex items-center justify-center transition-colors`}
             >
-              <span className="text-2xl font-bold text-white">Bell.</span>
+              <img src="public/icon.png" alt="Logo" className="" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold">Bell fresh</h2>
+              <h2 className="text-2xl font-bold">BookletKu</h2>
               <p className="text-[#DCD7C9] text-sm">{text.desc}</p>
             </div>
           </div>
