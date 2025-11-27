@@ -42,7 +42,7 @@ export default function StoreBanner({
             <div
               className={`${iconBgClass} rounded-full w-16 h-16 flex items-center justify-center transition-colors`}
             >
-              <img src="public/icon.png" alt="Logo" className="" />
+              <img src="/icon.png" alt="Logo" className="" />
             </div>
             <div>
               <h2 className="text-2xl font-bold">BookletKu</h2>
