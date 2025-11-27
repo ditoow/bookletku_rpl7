@@ -11,14 +11,21 @@ interface CartItem {
   price: number;
   image?: string;
 }
-
 interface CartProps {
   cartItems: CartItem[];
   setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
   onCheckout: () => void;
+  theme: "minimalist" | "colorful";
+  language: "id" | "en";
 }
 
-export function CartMobile({ cartItems, setCartItems, onCheckout }: CartProps) {
+export function CartMobile({
+  cartItems,
+  setCartItems,
+  onCheckout,
+  theme,
+  language,
+}: CartProps) {
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
@@ -37,27 +44,45 @@ export function CartMobile({ cartItems, setCartItems, onCheckout }: CartProps) {
     );
   };
 
-  const removeItem = (id: string) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
-  };
+  if (cartItems.length === 0) return null;
 
-  if (cartItems.length === 0) {
-    return null;
-  }
+  const barBgClass =
+    theme === "minimalist"
+      ? "bg-linear-to-r from-[#2C3930] via-[#3F4F44] to-[#2C3930]"
+      : "bg-gradient-to-r from-pink-500 to-violet-500";
+  const buttonClass =
+    theme === "minimalist"
+      ? "bg-[#A27B5C] hover:bg-[#8d6a4d]"
+      : "bg-pink-500 hover:bg-pink-600";
+  const checkoutClass =
+    theme === "minimalist"
+      ? "bg-green-600 hover:bg-green-700"
+      : "bg-purple-600 hover:bg-purple-700";
+
+  const t = {
+    viewCart: language === "id" ? "Lihat Keranjang" : "View Cart",
+    itemsSelected: language === "id" ? "item terpilih" : "items selected",
+    yourOrder: language === "id" ? "Pesanan Anda" : "Your Order",
+    subtotal: language === "id" ? "Subtotal" : "Subtotal",
+    total: "Total",
+    orderWa: language === "id" ? "Pesan via WhatsApp" : "Order via WhatsApp",
+  };
 
   return (
     <Dialog>
       <div className="fixed bottom-4 left-0 right-0 px-4 z-50">
         <DialogTrigger asChild>
-          <button className="w-full bg-linear-to-r from-[#2C3930] via-[#3F4F44] to-[#2C3930] text-white rounded-2xl p-4 flex items-center justify-between shadow-xl transition-all">
+          <button
+            className={`w-full ${barBgClass} text-white rounded-2xl p-4 flex items-center justify-between shadow-xl transition-all`}
+          >
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-green-500/40 rounded-xl flex items-center justify-center text-white text-lg font-semibold">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-white text-lg font-semibold">
                 {totalQty}
               </div>
               <div className="flex flex-col text-left">
-                <span className="font-bold text-lg">Lihat Keranjang</span>
+                <span className="font-bold text-lg">{t.viewCart}</span>
                 <span className="text-white/80 text-sm">
-                  {totalQty} item terpilih
+                  {totalQty} {t.itemsSelected}
                 </span>
               </div>
             </div>
@@ -72,9 +97,8 @@ export function CartMobile({ cartItems, setCartItems, onCheckout }: CartProps) {
         <div className="p-6">
           <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
             <ShoppingCart className="w-5 h-5 text-orange-500" />
-            Pesanan Anda
+            {t.yourOrder}
           </h2>
-
           <div className="space-y-3 mb-4 max-h-[400px] overflow-y-auto">
             {cartItems.map((item) => (
               <div
@@ -89,7 +113,6 @@ export function CartMobile({ cartItems, setCartItems, onCheckout }: CartProps) {
                       className="w-14 h-14 object-cover rounded-xl"
                     />
                   )}
-
                   <div className="flex flex-col flex-1">
                     <span className="font-semibold text-gray-900">
                       {item.name}
@@ -99,12 +122,11 @@ export function CartMobile({ cartItems, setCartItems, onCheckout }: CartProps) {
                     </span>
                   </div>
                 </div>
-
                 <div className="flex flex-col items-end gap-2">
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => updateQuantity(item.id, -1)}
-                      className="w-7 h-7 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                      className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center"
                     >
                       <Minus className="w-4 h-4" />
                     </button>
@@ -113,9 +135,9 @@ export function CartMobile({ cartItems, setCartItems, onCheckout }: CartProps) {
                     </span>
                     <button
                       onClick={() => updateQuantity(item.id, 1)}
-                      className="w-7 h-7 rounded-lg bg-[#A27B5C] text-white hover:bg-[#8d6a4d] flex items-center justify-center transition-colors"
+                      className={`w-7 h-7 rounded-lg text-white flex items-center justify-center ${buttonClass}`}
                     >
-                      <Plus className="w-4 h-4 text-white" />
+                      <Plus className="w-4 h-4" />
                     </button>
                   </div>
                   <span className="font-semibold text-sm">
@@ -125,25 +147,21 @@ export function CartMobile({ cartItems, setCartItems, onCheckout }: CartProps) {
               </div>
             ))}
           </div>
-
           <div className="border-t pt-4">
             <div className="flex justify-between text-gray-500 mb-2">
-              <span>Subtotal</span>
+              <span>{t.subtotal}</span>
               <span>Rp {subtotal.toLocaleString("id-ID")}</span>
             </div>
-
             <div className="flex justify-between text-xl font-bold">
-              <span>Total</span>
+              <span>{t.total}</span>
               <span>Rp {subtotal.toLocaleString("id-ID")}</span>
             </div>
           </div>
-
-          {/* BUTTON CHECKOUT MOBILE, CLASSNAME TETAP SAMA */}
           <button
             onClick={onCheckout}
-            className="w-full mt-6 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-2xl py-4 text-lg transition-colors"
+            className={`w-full bg-linear-to-r from-[#2C3930] via-[#3F4F44] to-[#2C3930] mt-6 text-white font-semibold rounded-2xl py-4 text-lg transition-colors ${checkoutClass}`}
           >
-            Pesan via WhatsApp
+            {t.orderWa}
           </button>
         </div>
       </DialogContent>
