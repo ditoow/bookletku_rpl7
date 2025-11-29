@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { trackAddToCart } from "@/features/menu/services/menuServices";
+import { trackAddToCart } from "@/features/main/menu/services/menuServices";
 
 export function useCart() {
   const [cartItems, setCartItems] = useState<any[]>([]);

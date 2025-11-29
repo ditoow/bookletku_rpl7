@@ -2,19 +2,19 @@
 
 import React, { useState } from "react";
 
-import Header from "@/features/layout/components/Header";
-import StoreBanner from "@/features/layout/components/StoreBanner";
-import FeaturedMenu from "@/features/menu/components/FeaturedMenu";
-import Category from "@/features/menu/components/CategoryMenu";
-import MenuSection from "@/features/menu/components/MenuSection";
-import CartSidebar from "@/features/cart/components/CartSidebar";
-import { CartMobile } from "@/features/cart/components/CartMobile";
-import CartButton from "@/features/cart/components/CartButton";
-import OrderConfirmationDialog from "@/features/cart/components/OrderConfirmation";
+import Header from "@/features/main/layout/components/Header";
+import StoreBanner from "@/features/main/layout/components/StoreBanner";
+import FeaturedMenu from "@/features/main/menu/components/FeaturedMenu";
+import Category from "@/features/main/menu/components/CategoryMenu";
+import MenuSection from "@/features/main/menu/components/MenuSection";
+import CartSidebar from "@/features/main/cart/components/CartSidebar";
+import { CartMobile } from "@/features/main/cart/components/CartMobile";
+import CartButton from "@/features/main/cart/components/CartButton";
+import OrderConfirmationDialog from "@/features/main/cart/components/OrderConfirmation";
 
-import { useMenuData } from "@/features/menu/hooks/useMenuData";
-import { useCart } from "@/features/cart/hooks/useCart";
-import { useCheckout } from "@/features/cart/hooks/useCheckout";
+import { useMenuData } from "@/features/main/menu/hooks/useMenuData";
+import { useCart } from "@/features/main/cart/hooks/useCart";
+import { useCheckout } from "@/features/main/cart/hooks/useCheckout";
 
 export type ThemeType = "minimalist" | "colorful";
 
@@ -54,7 +54,7 @@ export default function FoodOrderApp() {
 
   return (
     <div
-      className={`min-h-screen p-4 md:pt-12 md:pb-16 transition-colors duration-500 ${bgClass}`}
+      className={`min-h-screen p-4 md:pt-12 md:pb-36 transition-colors duration-500 ${bgClass}`}
     >
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row gap-6 justify-center">

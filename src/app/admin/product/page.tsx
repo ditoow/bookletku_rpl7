@@ -87,50 +87,55 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 p-2 md:p-0">
       {/* --- Header --- */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
-            Products Management
-          </h2>
-          <p className="text-sm md:text-base text-gray-500 mt-1">
-            Kelola menu dan produk restoran Anda
-          </p>
+      <div className="backdrop-blur-xl bg-white/30 border border-white/40 rounded-2xl p-6 shadow-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+              Products Management
+            </h2>
+            <p className="text-sm md:text-base text-gray-600 mt-1">
+              Kelola menu dan produk restoran Anda
+            </p>
+          </div>
+          <Button
+            onClick={handleAddClick}
+            className="bg-gradient-to-br from-[#A27B5C] to-[#8d6a4d] hover:from-[#8d6a4d] hover:to-[#7a5d44] text-white rounded-xl w-full sm:w-auto shadow-lg shadow-[#A27B5C]/30 hover:shadow-xl transition-all duration-300 hover:scale-105"
+          >
+            <Plus size={20} className="mr-2" />
+            Tambah Produk
+          </Button>
         </div>
-        <Button
-          onClick={handleAddClick}
-          className="bg-[#FF9B6A] hover:bg-[#FF8A55] rounded-xl w-full sm:w-auto"
-        >
-          <Plus size={20} className="mr-2" />
-          Tambah Produk
-        </Button>
       </div>
 
       {/* --- Search Bar (Responsif) --- */}
-      {/* Diubah dari flex biasa menjadi flex-col di mobile agar tidak gepeng */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 md:p-6 bg-white border rounded-xl shadow-sm gap-4">
-        <div>
-          <h3 className="font-bold text-lg md:text-xl">Daftar Produk</h3>
-          <span className="text-sm text-gray-500">
-            {products.length} produk tersedia
-          </span>
-        </div>
+      <div className="backdrop-blur-xl bg-white/30 border border-white/40 rounded-2xl p-4 md:p-6 shadow-xl">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 className="font-bold text-lg md:text-xl bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+              Daftar Produk
+            </h3>
+            <span className="text-sm text-gray-600">
+              {products.length} produk tersedia
+            </span>
+          </div>
 
-        <div className="relative w-full sm:max-w-xs">
-          <Search
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-            size={20}
-          />
-          <Input
-            placeholder="Cari produk..."
-            className="pl-10 w-full"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+          <div className="relative w-full sm:max-w-xs">
+            <Search
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+              size={20}
+            />
+            <Input
+              placeholder="Cari produk..."
+              className="pl-10 w-full bg-white/50 backdrop-blur-sm border-white/60 focus:border-[#A27B5C] rounded-xl"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
         </div>
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-600">
+        <div className="p-4 backdrop-blur-xl bg-red-100/50 border border-red-300/50 rounded-xl text-red-700 shadow-lg">
           <p className="font-semibold">Terjadi Kesalahan: {error}</p>
         </div>
       )}
@@ -164,7 +169,7 @@ export default function Dashboard() {
         open={!!previewImage}
         onOpenChange={(open) => !open && setPreviewImage(null)}
       >
-        <DialogContent className="max-w-4xl p-2 bg-black/90 border-none">
+        <DialogContent className="max-w-4xl p-2 backdrop-blur-2xl bg-black/90 border border-white/20 shadow-2xl">
           <div className="relative flex items-center justify-center">
             {previewImage && (
               <img
@@ -175,7 +180,7 @@ export default function Dashboard() {
             )}
             <button
               onClick={() => setPreviewImage(null)}
-              className="absolute top-2 right-2 bg-white text-black p-2 rounded-full hover:bg-white/20 transition-colors"
+              className="absolute top-2 right-2 backdrop-blur-xl bg-white/20 text-white p-2 rounded-full hover:bg-white/30 transition-all duration-300 border border-white/40"
             >
               <X size={20} />
             </button>

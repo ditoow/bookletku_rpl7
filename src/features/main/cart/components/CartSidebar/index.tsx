@@ -56,7 +56,7 @@ export default function CartSidebar({
 
     return (
         <div className="shrink-0">
-            <Card className="sticky p-0 top-6 w-full md:w-[400px] bg-white shadow-2xl border-2 border-gray-100 transition-all duration-300 hover:shadow-3xl overflow-hidden">
+            <Card className="sticky p-0 top-6  w-full md:w-[400px] bg-white shadow-xl border-2 border-gray-100 transition-all duration-300 hover:shadow-3xl overflow-hidden">
                 <CartHeader
                     language={language}
                     theme={theme}

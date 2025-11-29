@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { fetchMenuItems } from "@/features/menu/services/menuServices";
+import { fetchMenuItems } from "@/features/main/menu/services/menuServices";
 
 export type MenuRow = {
   id: string;

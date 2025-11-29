@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { supabase } from "@/shared/lib/supabase";
-import AdminSidebar from "@/features/layout/components/Sidebar";
+import AdminSidebar from "@/features/main/layout/components/Sidebar";
 import { Loader2, Menu } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 
@@ -86,14 +86,14 @@ export default function AdminLayout({
 
   // Render authenticated pages with sidebar
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
+    <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 overflow-hidden">
       <AdminSidebar
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
       />
 
       <div className="flex-1 flex flex-col w-full">
-        <header className="md:hidden bg-white border-b p-4 flex items-center gap-4 sticky top-0 z-30">
+        <header className="md:hidden backdrop-blur-xl bg-white/30 border-b border-white/20 p-4 flex items-center gap-4 sticky top-0 z-30">
           <Button
             variant="ghost"
             size="icon"
@@ -102,7 +102,7 @@ export default function AdminLayout({
           >
             <Menu className="h-6 w-6 text-gray-700" />
           </Button>
-          <h1 className="font-bold text-lg text-gray-800">Admin Panel</h1>
+          <h1 className="font-bold text-lg bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">Admin Panel</h1>
         </header>
 
         <main className="flex-1 p-4 md:p-6 overflow-y-auto">{children}</main>

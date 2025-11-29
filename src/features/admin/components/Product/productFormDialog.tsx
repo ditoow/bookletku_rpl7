@@ -234,7 +234,7 @@ export function ProductFormDialog({
             </Button>
             <Button
               type="submit"
-              className="bg-[#FF9B6A] hover:bg-[#FF8A55]"
+              className="bg-gradient-to-br from-[#A27B5C] to-[#8d6a4d] hover:from-[#8d6a4d] hover:to-[#7a5d44] text-white shadow-lg shadow-[#A27B5C]/30"
               disabled={loading}
             >
               {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
