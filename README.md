@@ -21,7 +21,7 @@ bookletku.vercel.app
 ## Features
 
 ### Customer Features
-- **Digital Menu Browsing** - Browse menu dengan kategori dan search
+- **Digital Menu Browsing** - Browser menu dengan kategori dan search
 - **Shopping Cart** - Add to cart dengan quantity management
 - **Featured Menu Carousel** - Horizontal scrollable popular items
 - **Category Filtering** - Filter menu by category
