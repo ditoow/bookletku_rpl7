@@ -41,11 +41,11 @@ export default function Login() {
   };
 
   return (
-    <div className="relative flex items-center justify-center min-h-screen overflow-hidden bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
-      {/* Animated background blobs */}
-      <div className="absolute top-0 left-0 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-      <div className="absolute top-0 right-0 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-      <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+    <div className="relative flex items-center justify-center min-h-screen overflow-hidden bg-[#DCD7C9]">
+      {/* Animated background blobs - subtle brown tones */}
+      <div className="absolute top-0 left-0 w-72 h-72 bg-[#C9B8A5] rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob"></div>
+      <div className="absolute top-0 right-0 w-72 h-72 bg-[#B5A08E] rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-2000"></div>
+      <div className="absolute -bottom-8 left-20 w-72 h-72 bg-[#A89681] rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-4000"></div>
 
       {/* Login Card */}
       <div className="relative z-10 w-full max-w-md mx-4">
